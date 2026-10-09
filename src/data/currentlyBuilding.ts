@@ -1,62 +1,76 @@
+export type TrackStatus = "BUILDING" | "EXPERIMENTING" | "LEARNING" | "COMPLETED";
+
 export interface ActiveTrack {
   id: string;
   title: string;
-  phase: string;
-  statusVisual: string;
-  percentageText: string;
-  focus: string;
-  tags: string[];
+  category: string;
+  status: TrackStatus;
+  statusBadge: string;
+  description: string;
+  technologies: string[];
+  linkUrl?: string;
+  linkText?: string;
 }
 
 export const activeTracks: ActiveTrack[] = [
   {
     id: "ai-harness",
-    title: "AI CODING HARNESS (MYPI)",
-    phase: "AGENT RUNTIME & TOOL SANDBOX",
-    statusVisual: "███████████░",
-    percentageText: "85%",
-    focus: "Refining multi-step bash execution, diff-based file patching, and context eviction algorithms.",
-    tags: ["TypeScript", "Agent Loops", "Tool Calling", "CLI"],
+    title: "AI CODING HARNESS",
+    category: "DEVELOPER TOOLS · AGENTIC RUNTIME",
+    status: "BUILDING",
+    statusBadge: "ACTIVE WORK",
+    description:
+      "A developer-tooling project exploring AI-assisted coding workflows, multi-provider model integration, deterministic tool execution loops, and automated feedback diffs.",
+    technologies: ["TypeScript", "Agent Loops", "Tool Calling", "CLI"],
+    linkUrl: "https://github.com/ouroboros1X/claudecode-harnes",
+    linkText: "VIEW REPO →",
   },
   {
     id: "chromium-llm",
     title: "ON-DEVICE CHROMIUM LLM ENGINE",
-    phase: "CORE INTEGRATION & INFERENCE",
-    statusVisual: "████████░░░░",
-    percentageText: "70%",
-    focus: "Executing local models on-device inside browser context for private DOM reasoning without cloud APIs.",
-    tags: ["Chromium", "C++", "Local Inference", "Privacy"],
+    category: "LOCAL INFERENCE · BROWSER RUNTIME",
+    status: "EXPERIMENTING",
+    statusBadge: "EXPLORATION",
+    description:
+      "An engineering investigation exploring local AI model inference inside browser and Chromium runtimes for private DOM reasoning and zero-cloud API workflows.",
+    technologies: ["Chromium", "C++", "Local Inference", "WebGPU"],
+    linkUrl: "https://github.com/ouroboros1X",
+    linkText: "RESEARCH LOG →",
   },
   {
     id: "gpt2-engine",
     title: "GPT-2 C++ INFERENCE ENGINE",
-    phase: "SIMD & BENCHMARKING",
-    statusVisual: "████████████",
-    percentageText: "95%",
-    focus: "Verifying numerical token logit alignment against PyTorch reference tensors and AVX2 vectorization.",
-    tags: ["C++17", "Transformers", "AVX2", "Systems"],
+    category: "SYSTEMS · MACHINE LEARNING RUNTIME",
+    status: "COMPLETED",
+    statusBadge: "FUNCTIONAL PROTOTYPE",
+    description:
+      "A transformer forward pass implemented from first principles in standard C++17, focused on understanding the mechanics of GPT-2 inference without PyTorch, ONNX, or runtime libraries.",
+    technologies: ["C++17", "Attention Kernels", "Cache Tiling", "SIMD"],
+    linkUrl: "https://github.com/ouroboros1X/GPT2_INFERENCE-ENGINE",
+    linkText: "VIEW SOURCE →",
   },
 ];
 
 export const explorationAreas = [
-  "LLM AGENTS",
-  "TOOL USE",
-  "C++",
-  "GO",
-  "SYSTEM DESIGN",
+  "LLM AGENT LOOPS",
+  "TOOL USE PROTOCOLS",
+  "C++17 SYSTEMS",
+  "GO RUNTIMES",
+  "DATABASE INTERNALS",
+  "STREAMING WEBSOCKETS",
 ];
 
 export const openToOpportunities = [
   {
-    title: "INTERNSHIPS",
-    desc: "AI infrastructure, systems engineering, backend platforms, and developer tools.",
+    title: "FULL-STACK & SAAS ROLES",
+    desc: "Building high-utility web applications, scalable SaaS products, and resilient backend services.",
   },
   {
-    title: "COLLABORATIONS",
-    desc: "Working alongside teams shipping high-performance software and real runtimes.",
+    title: "SYSTEMS & BACKEND PLATFORMS",
+    desc: "Engineering high-throughput services, distributed dataflows, and developer infrastructure.",
   },
   {
-    title: "OPEN SOURCE",
-    desc: "Building tools, compilers, inference engines, and open infrastructure in public.",
+    title: "OPEN SOURCE COLLABORATIONS",
+    desc: "Collaborating in public on developer tools, inference experiments, and first-principles software.",
   },
 ];

@@ -31,10 +31,10 @@ export const Hero: React.FC = () => {
             </h1>
 
             {/* Supporting Copy */}
-            <p className="text-base sm:text-lg md:text-xl text-[#050505]/80 font-normal leading-relaxed max-w-xl mb-8 sm:mb-10">
-              Software engineer building across AI, systems, backend infrastructure and developer tooling.
-              <span className="block mt-2 font-mono text-xs sm:text-sm text-[#050505]/60">
-                &ldquo;{siteConfig.coreQuote}&rdquo;
+            <p className="text-base sm:text-lg md:text-xl text-[#050505]/85 font-normal leading-relaxed max-w-xl mb-8 sm:mb-10">
+              I build web applications, SaaS products, and backend systems. Along the way, I explore how AI works from the ground up.
+              <span className="block mt-2.5 font-mono text-xs sm:text-sm text-[#050505]/65">
+                &ldquo;{siteConfig.subQuote}&rdquo;
               </span>
             </p>
 
@@ -77,46 +77,46 @@ export const Hero: React.FC = () => {
               </div>
 
               {/* Technical Spec Rows */}
-              <div className="space-y-3.5 font-mono text-xs sm:text-sm divide-y divide-black/10">
+              <div className="space-y-3 font-mono text-xs sm:text-sm divide-y divide-black/10">
                 <div className="flex justify-between items-center pt-2 first:pt-0">
-                  <span className="text-[#050505]/60 font-semibold">FOCUS</span>
+                  <span className="text-[#050505]/60 font-semibold">PRIMARY FOCUS</span>
                   <span className="font-bold text-[#050505] text-right">
-                    {siteConfig.spec.focus}
+                    {siteConfig.spec.primaryFocus}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center pt-2">
-                  <span className="text-[#050505]/60 font-semibold">BUILD</span>
+                  <span className="text-[#050505]/60 font-semibold">BUILDING</span>
                   <span className="font-bold text-[#050505] text-right">
-                    {siteConfig.spec.build}
+                    {siteConfig.spec.building}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-start pt-2">
-                  <span className="text-[#050505]/60 font-semibold shrink-0">STACK</span>
+                  <span className="text-[#050505]/60 font-semibold shrink-0">ALSO EXPLORING</span>
                   <span className="font-bold text-[#050505] text-right">
-                    {siteConfig.spec.stack}
+                    {siteConfig.spec.exploring}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-start pt-2">
-                  <span className="text-[#050505]/60 font-semibold shrink-0">ENV</span>
+                  <span className="text-[#050505]/60 font-semibold shrink-0">BACKEND</span>
+                  <span className="font-bold text-[#050505] text-right">
+                    {siteConfig.spec.backend}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center pt-2">
+                  <span className="text-[#050505]/60 font-semibold">ENVIRONMENT</span>
                   <span className="font-bold text-[#050505] text-right">
                     {siteConfig.spec.env}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center pt-2">
-                  <span className="text-[#050505]/60 font-semibold">ARCH / OS</span>
-                  <span className="font-bold text-[#050505] text-right">
-                    {siteConfig.spec.arch}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center pt-2">
                   <span className="text-[#050505]/60 font-semibold">LOCATION</span>
                   <span className="font-bold text-[#050505] text-right">
-                    {siteConfig.location}
+                    {siteConfig.spec.location}
                   </span>
                 </div>
 
@@ -130,9 +130,9 @@ export const Hero: React.FC = () => {
               </div>
 
               {/* Spec Footer Stamp */}
-              <div className="mt-6 pt-4 border-t-2 border-dashed border-[#050505]/30 flex items-center justify-between font-mono text-[10px] text-[#050505]/60">
-                <span>SYSTEM ID: VX-9403</span>
-                <span>STATUS: VERIFIED READY</span>
+              <div className="mt-5 pt-3.5 border-t-2 border-dashed border-[#050505]/25 flex items-center justify-between font-mono text-[10px] text-[#050505]/60">
+                <span>CORE STACK: TS · REACT · NODE</span>
+                <span>TIMEZONE: UTC+05:30</span>
               </div>
             </BrutalCard>
           </div>

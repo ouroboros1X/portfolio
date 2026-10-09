@@ -24,7 +24,7 @@ export const SelectedWork: React.FC = () => {
             THINGS I&apos;VE BUILT.
           </h2>
           <p className="font-mono text-xs sm:text-sm text-[#050505]/70 mt-2 max-w-xl">
-            Case studies of systems built close to the machine. No superficial mockups — every project runs real code.
+            Engineering projects and functional systems built from first principles. No superficial mockups — every project runs real code.
           </p>
         </div>
 
@@ -99,15 +99,21 @@ export const SelectedWork: React.FC = () => {
                       isExternal
                       id={`project-gh-${idx}`}
                     >
-                      GITHUB →
+                      {project.sourceCtaLabel || "GITHUB →"}
                     </Button>
                     <Button
                       variant="cyan"
                       size="md"
-                      onClick={() => setSelectedCaseStudy(project)}
+                      href={project.liveUrl}
+                      isExternal={Boolean(project.liveUrl)}
+                      onClick={
+                        project.liveUrl
+                          ? undefined
+                          : () => setSelectedCaseStudy(project)
+                      }
                       id={`project-case-study-${idx}`}
                     >
-                      CASE STUDY →
+                      {project.exploreCtaLabel || "CASE STUDY →"}
                     </Button>
                   </div>
                 </div>
@@ -115,14 +121,22 @@ export const SelectedWork: React.FC = () => {
                 {/* Right: Technical Diagram & Metrics (5 cols) */}
                 <div className="lg:col-span-5 flex flex-col gap-6">
                   {/* Architecture Diagram */}
-                  <ArchitectureDiagram steps={project.pipeline.steps} />
+                  <ArchitectureDiagram
+                    steps={project.pipeline.steps}
+                    title={project.pipeline.title}
+                  />
 
                   {/* Quick Metrics Bar */}
                   <div className="grid grid-cols-2 gap-2.5 font-mono text-xs">
-                    {project.metrics.map((m) => (
+                    {project.metrics.map((m, mIdx) => (
                       <div
                         key={m.label}
-                        className="p-2.5 bg-[#F5F5F0] border border-[#050505]"
+                        className={`p-2.5 bg-[#F5F5F0] border border-[#050505] ${
+                          mIdx === project.metrics.length - 1 &&
+                          project.metrics.length % 2 === 1
+                            ? "col-span-2"
+                            : ""
+                        }`}
                       >
                         <div className="text-[10px] text-[#050505]/60 uppercase">
                           {m.label}

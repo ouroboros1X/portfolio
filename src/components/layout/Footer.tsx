@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
               </span>
             </div>
             <p className="font-mono text-sm text-[#F5F5F0]/70">
-              Software Engineer · Builder
+              Full-Stack &amp; SaaS Engineer · AI Systems Explorer
             </p>
           </div>
 
@@ -33,16 +33,28 @@ export const Footer: React.FC = () => {
               WORK
             </a>
             <a
-              href="#about"
+              href="#stack"
               className="text-[#F5F5F0]/80 hover:text-[#00F0FF] transition-colors"
             >
-              ABOUT
+              STACK
+            </a>
+            <a
+              href="#systems"
+              className="text-[#F5F5F0]/80 hover:text-[#00F0FF] transition-colors"
+            >
+              SYSTEMS
             </a>
             <a
               href="#building"
               className="text-[#F5F5F0]/80 hover:text-[#00F0FF] transition-colors"
             >
               BUILDING
+            </a>
+            <a
+              href="#about"
+              className="text-[#F5F5F0]/80 hover:text-[#00F0FF] transition-colors"
+            >
+              ABOUT
             </a>
             <a
               href="#contact"

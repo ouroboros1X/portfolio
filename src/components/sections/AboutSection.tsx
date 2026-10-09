@@ -26,8 +26,8 @@ export const AboutSection: React.FC = () => {
 
             <div className="font-mono text-xs text-[#050505]/70 space-y-1 mt-6">
               <p>LOCATION: {siteConfig.location} [UTC+5:30]</p>
-              <p>BACKGROUND: COMPUTER SYSTEMS & INFRASTRUCTURE</p>
-              <p>OPERATING POSTURE: FIRST-PRINCIPLES ONLY</p>
+              <p>PRIMARY FOCUS: FULL-STACK WEB &amp; SAAS</p>
+              <p>EXPLORING: AI MECHANICS &amp; SYSTEMS INFRASTRUCTURE</p>
             </div>
           </div>
 
@@ -44,15 +44,15 @@ export const AboutSection: React.FC = () => {
               </h3>
 
               <p className="text-base sm:text-lg text-[#050505] leading-relaxed font-normal">
-                I&apos;m <span className="font-bold">{siteConfig.fullName}</span>, a software engineer and builder interested in AI, systems, and the infrastructure that makes software work.
+                I&apos;m <span className="font-bold">{siteConfig.fullName}</span>, a full-stack software engineer focused on building web applications, SaaS products, and reliable backend infrastructure.
               </p>
 
               <p className="text-sm sm:text-base text-[#050505]/85 leading-relaxed">
-                I don&apos;t just construct user interfaces. I like building things from the ground up, understanding why they work, and pushing them until I understand where they break.
+                My primary focus is building full-stack software that is useful, reliable, and user-centric. Alongside product development, I explore how modern systems work from first principles — understanding the mechanics underneath APIs, runtime engines, and language models.
               </p>
 
               <p className="text-sm sm:text-base text-[#050505]/85 leading-relaxed">
-                Whether writing a pure C++ Transformer inference engine without PyTorch, engineering an in-memory limit order matching engine, or automating container clusters in Linux — I care about determinism, performance, and shipping things that actually execute.
+                Whether architecting real-time streaming interfaces, writing transactional ledgers, or deconstructing GPT-2 inference in pure C++ — I care about deterministic behavior, clean architecture, and shipping things that actually execute.
               </p>
 
               {/* Direct Link Actions */}

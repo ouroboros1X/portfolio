@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/Hero";
 import { TechTicker } from "@/components/sections/TechTicker";
 import { ProofSection } from "@/components/sections/ProofSection";
 import { SelectedWork } from "@/components/sections/SelectedWork";
+import { TechStackSection } from "@/components/sections/TechStackSection";
 import { UnderTheHood } from "@/components/sections/UnderTheHood";
 import { CurrentlyBuilding } from "@/components/sections/CurrentlyBuilding";
 import { AboutSection } from "@/components/sections/AboutSection";
@@ -41,10 +42,13 @@ export default function Home() {
         {/* 07 Selected Work */}
         <SelectedWork />
 
-        {/* 08 Under the Hood */}
+        {/* 08 Technology Stack */}
+        <TechStackSection />
+
+        {/* 09 Under the Hood */}
         <UnderTheHood />
 
-        {/* 09 Currently Building */}
+        {/* 10 Currently Building */}
         <CurrentlyBuilding />
 
         {/* 10 About */}

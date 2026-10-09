@@ -8,8 +8,12 @@ export interface Project {
   technicalDetails: string[];
   tags: string[];
   githubUrl: string;
+  liveUrl?: string;
+  sourceCtaLabel?: string;
+  exploreCtaLabel?: string;
   caseStudyAvailable: boolean;
   pipeline: {
+    title?: string;
     steps: {
       name: string;
       desc: string;
@@ -21,6 +25,7 @@ export interface Project {
     value: string;
   }[];
   deepDive: {
+    modalEyebrow?: string;
     problem: string;
     implementation: string;
     keyTakeaway: string;
@@ -109,7 +114,7 @@ void causal_self_attention(
       "Robust error recovery: feedback loops when shell commands fail or edits do not match file markers",
     ],
     tags: ["TYPESCRIPT", "LLM", "AGENTS", "CLI"],
-    githubUrl: "https://github.com/ouroboros1X",
+    githubUrl: "https://github.com/ouroboros1X/claudecode-harnes",
     caseStudyAvailable: true,
     pipeline: {
       steps: [
@@ -156,59 +161,108 @@ void causal_self_attention(
   },
   {
     id: "f1-telemetry-platform",
-    number: "PROJECT 03",
+    number: "PERSONAL PROJECT 03",
     title: "F1 TELEMETRY / DATA PLATFORM",
-    category: "HIGH-FREQUENCY STREAMING · SYSTEMS",
-    tagline: "Real-time garage pitwall telemetry and streaming telemetry analytics.",
+    category: "REAL-TIME STREAMING · DATA ENGINEERING",
+    tagline: "A personal engineering project exploring real-time Formula 1 telemetry and streaming analytics.",
     description:
-      "A high-density live telemetry and pitwall analytics dashboard built for Formula 1 session monitoring. Ingests high-frequency telemetry streams via OpenF1 and distributes sensor packets over WebSockets to canvas-rendered speedometer gauges, throttle/brake overlays, and timing deltas.",
+      "Built as a personal project to explore live Formula 1 data, telemetry streaming, and high-frequency visualization. The platform experiments with ingesting data from OpenF1, distributing telemetry through WebSockets, and rendering driver and car information in a custom dashboard.",
     technicalDetails: [
-      "Real-time WebSocket streaming server broadcasting sub-second car sensor packets (Speed, RPM, Gear, DRS)",
-      "Canvas-based rendering for high-frequency lap comparison graphs without React DOM reconciliation overhead",
-      "Driver head-to-head delta analysis computing micro-sector pace differences",
-      "Draggable, customizable garage pitwall grid with resilient reconnection handling",
+      "Real-time telemetry streaming and client-side updates.",
+      "WebSocket-based communication and reconnection handling.",
+      "Canvas-based visualization for telemetry data.",
+      "Driver comparisons and telemetry analysis.",
+      "A customizable Formula 1 garage-style dashboard.",
     ],
-    tags: ["REACT 19", "TYPESCRIPT", "WEBSOCKETS", "EXPRESS", "CANVAS API", "OPENF1"],
+    tags: ["REACT 19", "TYPESCRIPT", "WEBSOCKETS", "EXPRESS", "HTML5 CANVAS", "OPENF1 API"],
     githubUrl: "https://github.com/ouroboros1X",
+    sourceCtaLabel: "VIEW SOURCE →",
+    exploreCtaLabel: "EXPLORE PROJECT →",
     caseStudyAvailable: true,
     pipeline: {
+      title: "DATAFLOW PIPELINE",
       steps: [
-        { name: "OPENF1 SOURCE", desc: "Live session feeds & car UDP packets", badge: "REST / Stream" },
-        { name: "STREAM MANAGER", desc: "Packet buffering & deduplication", badge: "Node Service" },
-        { name: "WEBSOCKET SERVER", desc: "Low-latency client broadcast", badge: "ws / TCP" },
-        { name: "CLIENT DISPATCH", desc: "React state & ring buffer queue", badge: "Zustand / Context" },
-        { name: "CANVAS RENDERER", desc: "Hardware-accelerated telemetry plots", badge: "60 FPS" },
-        { name: "PITWALL MONITOR", desc: "Live leaderboard & driver deltas", badge: "Garage UI" },
+        {
+          name: "DATA SOURCE",
+          desc: "OpenF1 API REST endpoints querying session schedule, driver rosters, and car data",
+          badge: "OpenF1 API",
+        },
+        {
+          name: "STREAMING LAYER",
+          desc: "Node.js service executing scheduled polling loops, validating session keys, and caching updates",
+          badge: "Node.js / Express",
+        },
+        {
+          name: "WEBSOCKET TRANSPORT",
+          desc: "Centralized ws WebSocket server broadcasting updates with exponential backoff client reconnects",
+          badge: "ws / TCP",
+        },
+        {
+          name: "CLIENT STATE",
+          desc: "React Context and TanStack Query managing session lifecycle, driver state, and HTTP hydration",
+          badge: "React Context",
+        },
+        {
+          name: "TELEMETRY VISUALIZATION",
+          desc: "HTML5 2D Canvas charts rendering speed, RPM, throttle, and brake traces directly to canvas",
+          badge: "2D Canvas API",
+        },
+        {
+          name: "DASHBOARD",
+          desc: "Personal F1 telemetry interface with draggable / resizable widget grid and driver comparison studio",
+          badge: "Garage UI",
+        },
       ],
     },
     metrics: [
-      { label: "STREAM PROTOCOL", value: "WEBSOCKETS (WS)" },
-      { label: "RENDER REFRESH", value: "60 FPS CANVAS" },
-      { label: "DATA SOURCE", value: "OPENF1 LIVE API" },
-      { label: "PACKET LATENCY", value: "< 25MS BUFFER" },
+      { label: "DATA SOURCE", value: "OPENF1 API" },
+      { label: "COMMUNICATION PROTOCOL", value: "WEBSOCKETS (WS) + REST" },
+      { label: "RENDERING TECH", value: "HTML5 2D CANVAS" },
+      { label: "FRAMEWORK & LANGUAGE", value: "REACT 19 · TYPESCRIPT" },
+      { label: "CURRENT STATUS", value: "PERSONAL PROTOTYPE" },
     ],
     deepDive: {
+      modalEyebrow: "PERSONAL PROJECT EXPLORATION",
       problem:
-        "Rendering hundreds of incoming sensor packets per second in standard React virtual DOM leads to dropped frames, garbage collection spikes, and lagging telemetry visualization.",
+        "Investigating how to stream and visualize high-frequency Formula 1 telemetry without triggering excessive React virtual DOM reconciliation or layout thrashing during continuous updates.",
       implementation:
-        "Built a dedicated stream manager on the backend that normalizes vehicle states. On the frontend, bypassed DOM tree updates for charts by streaming into a circular buffer and drawing directly via HTML5 2D Canvas contexts.",
+        "Architected a dual-layer pipeline: a Node.js backend handles OpenF1 ingestion, data normalization, and WebSocket broadcasting, while the client bypasses DOM reflows by drawing telemetry channels (speed, RPM, throttle, brake) directly onto HTML5 2D Canvas contexts.",
       keyTakeaway:
-        "Separate your high-frequency telemetry pipeline from your UI layout tree. UI handles layout and menus; Canvas handles high-rate streams.",
+        "Decouple high-frequency streaming visualizations from declarative UI trees: declarative React handles responsive garage widgets and controls, while direct Canvas contexts handle rapid waveform rendering.",
       codeSnippet: {
-        filename: "stream_manager.ts",
+        filename: "ChannelChart.tsx",
         language: "typescript",
-        code: `// High-frequency telemetry stream consumer
-export class F1StreamManager extends EventEmitter {
-  private socket: WebSocket;
-  private ringBuffer: TelemetryPacket[] = [];
+        code: `// Direct HTML5 2D Canvas telemetry trace renderer (from src/pages/Telemetry.tsx)
+const ChannelChart: React.FC<ChannelChartProps> = React.memo(({ data, color }) => {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
-  public handlePacket(raw: Buffer) {
-    const packet = parseTelemetry(raw);
-    this.ringBuffer.push(packet);
-    if (this.ringBuffer.length > 500) this.ringBuffer.shift();
-    this.emit('telemetry:car', packet);
-  }
-}`,
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || data.length === 0) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+    const range = max - min || 1;
+
+    // Draw high-frequency telemetry signal line
+    ctx.clearRect(0, 0, w, h);
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    data.forEach((val, idx) => {
+      const x = (idx / (data.length - 1)) * w;
+      const y = h - ((val - min) / range) * (h - 10);
+      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }, [data, color]);
+
+  return <canvas ref={canvasRef} className="w-full h-[100px]" />;
+});`,
       },
     },
   },
@@ -227,7 +281,7 @@ export class F1StreamManager extends EventEmitter {
       "Event-driven transaction log for state reconstruction and failure recovery",
     ],
     tags: ["TYPESCRIPT", "MATCHING ENGINE", "ORDER BOOK", "PRISMA", "POSTGRESQL", "LOW LATENCY"],
-    githubUrl: "https://github.com/ouroboros1X",
+    githubUrl: "https://github.com/ouroboros1X/centralized-exchange",
     caseStudyAvailable: true,
     pipeline: {
       steps: [

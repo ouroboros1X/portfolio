@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { ScrollProgress } from "./ScrollProgress";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { label: "WORK", href: "#work" },
-  { label: "ABOUT", href: "#about" },
+  { label: "STACK", href: "#stack" },
+  { label: "SYSTEMS", href: "#systems" },
   { label: "BUILDING", href: "#building" },
+  { label: "ABOUT", href: "#about" },
   { label: "CONTACT", href: "#contact" },
 ];
 
@@ -17,7 +20,7 @@ export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const sectionIds = ["work", "about", "building", "contact"];
+    const sectionIds = ["work", "stack", "systems", "building", "about", "contact"];
     const handleScroll = () => {
       const scrollPos = window.scrollY + 120;
       for (const id of sectionIds) {
@@ -42,8 +45,8 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 w-full bg-[#F5F5F0]/95 backdrop-blur-sm border-b border-[#050505] transition-colors">
       <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <a
-          href="#"
+        <Link
+          href="/"
           className="group inline-flex items-center gap-2.5 font-mono text-sm tracking-tight text-[#050505] focus:outline-none"
           id="nav-brand-logo"
         >
@@ -51,10 +54,10 @@ export const Header: React.FC = () => {
             VX
           </span>
           <span className="font-extrabold tracking-wider text-base">VINAYAK</span>
-          <span className="hidden sm:inline-block text-[11px] text-[#050505]/50 font-normal">
-            / SWE · SYSTEMS
+          <span className="hidden sm:inline-block text-[11px] text-[#050505]/60 font-normal">
+            / FULL-STACK · SAAS
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav

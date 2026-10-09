@@ -9,11 +9,13 @@ interface Step {
 
 interface ArchitectureDiagramProps {
   steps: Step[];
+  title?: string;
   className?: string;
 }
 
 export const ArchitectureDiagram: React.FC<ArchitectureDiagramProps> = ({
   steps,
+  title = "DATAFLOW PIPELINE",
   className,
 }) => {
   return (
@@ -26,7 +28,7 @@ export const ArchitectureDiagram: React.FC<ArchitectureDiagramProps> = ({
       <div className="flex items-center justify-between border-b border-white/20 pb-2.5 mb-4">
         <div className="flex items-center gap-2 text-xs font-bold text-[#00F0FF]">
           <span className="w-2 h-2 bg-[#00F0FF] inline-block animate-pulse" />
-          <span>DATAFLOW PIPELINE SPEC</span>
+          <span>{title}</span>
         </div>
         <span className="text-[10px] text-white/50 tracking-wider">
           STEP-BY-STEP EXECUTION

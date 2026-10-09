@@ -50,7 +50,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               {project.number}
             </span>
             <span className="font-mono text-xs uppercase tracking-wider text-[#F5F5F0]/70">
-              DEEP-DIVE CASE STUDY
+              {project.deepDive.modalEyebrow || "DEEP-DIVE CASE STUDY"}
             </span>
           </div>
           <button
@@ -84,7 +84,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
           </div>
 
           {/* Metrics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-4 border-2 border-[#050505]">
+          <div className={`grid grid-cols-2 ${project.metrics.length >= 5 ? "sm:grid-cols-3 lg:grid-cols-5" : "sm:grid-cols-4"} gap-3 bg-white p-4 border-2 border-[#050505]`}>
             {project.metrics.map((m) => (
               <div key={m.label} className="font-mono">
                 <div className="text-[10px] text-[#050505]/60 uppercase">{m.label}</div>
@@ -148,14 +148,26 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 
         {/* Modal Footer Actions */}
         <div className="bg-white px-6 py-4 border-t-2 border-[#050505] flex items-center justify-between">
-          <Button
-            href={project.githubUrl}
-            variant="primary"
-            size="md"
-            isExternal
-          >
-            VIEW ON GITHUB →
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              href={project.githubUrl}
+              variant="primary"
+              size="md"
+              isExternal
+            >
+              {project.sourceCtaLabel || "VIEW ON GITHUB →"}
+            </Button>
+            {project.liveUrl && (
+              <Button
+                href={project.liveUrl}
+                variant="cyan"
+                size="md"
+                isExternal
+              >
+                {project.exploreCtaLabel || "EXPLORE PROJECT →"}
+              </Button>
+            )}
+          </div>
           <Button
             variant="outline"
             size="md"
