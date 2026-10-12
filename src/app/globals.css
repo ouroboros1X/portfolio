@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'NDot57';
+  src: url('/fonts/Ndot57-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'NDot55';
+  src: url('/fonts/Ndot55-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+.font-ndot {
+  font-family: 'NDot57', 'NDot55', monospace;
+}
+
 @theme {
   --color-canvas: #F5F5F0;
   --color-ink: #050505;
@@ -169,6 +189,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #00F0FF;
 }
+
+
 
 @media (prefers-reduced-motion: reduce) {
   *,

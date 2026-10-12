@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2">
               <span className="bg-[#00F0FF] text-[#050505] font-mono font-bold text-xs px-1.5 py-0.5">
-                VX
+                V1X
               </span>
               <span className="font-mono font-extrabold text-2xl tracking-wider text-white uppercase">
                 {siteConfig.name}

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VINAYAK — Full-Stack & SaaS Engineer · AI Systems Explorer",
+  title: "cracked developer",
   description:
     "Personal engineering portfolio of Vinayak Dhemare. Building web applications, SaaS products, and backend systems, while exploring AI and systems from first principles.",
   keywords: [
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Vinayak" }],
   openGraph: {
-    title: "VINAYAK — Full-Stack & SaaS Engineer · AI Systems Explorer",
+    title: "cracked developer",
     description:
       "I build web applications, SaaS products, and backend systems. Along the way, I explore how AI works from the ground up.",
     type: "website",
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "VINAYAK — Full-Stack & SaaS Engineer",
+    title: "cracked developer",
     description:
       "Building web applications, SaaS products, and backend systems, while exploring AI from first principles.",
   },
@@ -67,6 +68,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}
     >
       <head>
+        <link
+          rel="preload"
+          href="/fonts/Ndot57-Regular.otf"
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -88,6 +96,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[#F5F5F0] text-[#050505] font-sans antialiased selection:bg-[#00F0FF] selection:text-black">
         {children}
+        <Analytics />
       </body>
     </html>
   );

@@ -1,10 +1,43 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/data/siteConfig";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Button } from "@/components/ui/Button";
 import { BrutalCard } from "@/components/ui/BrutalCard";
 
+interface HeroPhrase {
+  full: string;
+  line1: string;
+  line2: string;
+}
+
+const HERO_PHRASES: HeroPhrase[] = [
+  { full: "ACTUALLY RUN.", line1: "ACTUALLY", line2: "RUN." },
+  { full: "SOLVE REAL PROBLEMS.", line1: "SOLVE REAL", line2: "PROBLEMS." },
+  { full: "SHIP REAL PRODUCTS.", line1: "SHIP REAL", line2: "PRODUCTS." },
+  { full: "SCALE WITH PURPOSE.", line1: "SCALE WITH", line2: "PURPOSE." },
+  { full: "WORK RELIABLY.", line1: "WORK", line2: "RELIABLY." },
+  { full: "MAKE AN IMPACT.", line1: "MAKE AN", line2: "IMPACT." },
+];
+
 export const Hero: React.FC = () => {
+  const [index, setIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % HERO_PHRASES.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [prefersReducedMotion]);
+
+  const currentPhrase = prefersReducedMotion ? HERO_PHRASES[0] : HERO_PHRASES[index];
+
   return (
     <section
       id="hero"
@@ -20,13 +53,59 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Oversized Brutalist Headline */}
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black tracking-tighter leading-[0.95] uppercase text-[#050505] mb-6 sm:mb-8 select-none">
+            <h1
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black tracking-tighter leading-[0.95] uppercase text-[#050505] mb-6 sm:mb-8 select-none"
+              aria-label={`I BUILD THINGS THAT ${currentPhrase.full}`}
+            >
               I BUILD
               <br />
               THINGS THAT
               <br />
-              <span className="bg-[#00F0FF] text-[#050505] px-2 py-0.5 inline-block border-2 border-[#050505] shadow-[3px_3px_0_#050505] mt-1">
-                ACTUALLY RUN.
+              <span className="bg-[#00F0FF] text-[#050505] px-3 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 inline-grid grid-cols-1 grid-rows-1 border-2 sm:border-[3px] border-[#050505] shadow-[4px_4px_0_#050505] sm:shadow-[5px_5px_0_#050505] md:shadow-[6px_6px_0_#050505] mt-2 sm:mt-3 md:mt-3.5 align-middle select-none max-w-full text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[2.35rem] xl:text-[3.15rem] 2xl:text-[3.35rem] leading-[1.05] relative overflow-hidden">
+                {/* Phantom spacer: locks dimensions to the longest phrase preventing any layout shifts */}
+                <span
+                  className="invisible pointer-events-none select-none opacity-0 col-start-1 row-start-1"
+                  aria-hidden="true"
+                >
+                  <span className="sm:inline hidden">SOLVE REAL PROBLEMS.</span>
+                  <span className="sm:hidden inline">
+                    SOLVE REAL
+                    <br />
+                    PROBLEMS.
+                  </span>
+                </span>
+
+                {/* Active animated phrase */}
+                <span className="col-start-1 row-start-1 flex items-center justify-start relative overflow-hidden w-full h-full">
+                  {prefersReducedMotion ? (
+                    <span className="inline-block">
+                      <span className="sm:inline hidden">{HERO_PHRASES[0].full}</span>
+                      <span className="sm:hidden inline">
+                        {HERO_PHRASES[0].line1}
+                        <br />
+                        {HERO_PHRASES[0].line2}
+                      </span>
+                    </span>
+                  ) : (
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      <motion.span
+                        key={currentPhrase.full}
+                        initial={{ y: "100%", opacity: 0 }}
+                        animate={{ y: "0%", opacity: 1 }}
+                        exit={{ y: "-100%", opacity: 0 }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        className="inline-block"
+                      >
+                        <span className="sm:inline hidden">{currentPhrase.full}</span>
+                        <span className="sm:hidden inline">
+                          {currentPhrase.line1}
+                          <br />
+                          {currentPhrase.line2}
+                        </span>
+                      </motion.span>
+                    </AnimatePresence>
+                  )}
+                </span>
               </span>
             </h1>
 

@@ -3,13 +3,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   activeTracks,
-  explorationAreas,
   openToOpportunities,
 } from "@/data/currentlyBuilding";
 import { siteConfig } from "@/data/siteConfig";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { BrutalCard } from "@/components/ui/BrutalCard";
 import { TechBadge } from "@/components/ui/TechBadge";
+import { GitHubContributions } from "./GitHubContributions";
 
 interface HistoryEntry {
   command: string;
@@ -22,7 +22,7 @@ export const CurrentlyBuilding: React.FC = () => {
     {
       command: "welcome",
       output:
-        "Antigravity Terminal v1.0 [Browser Client Simulator]\nType 'help' to inspect available commands.",
+        "Antigravity Terminal v1.0\nType 'help' to inspect available commands.",
     },
   ]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -71,10 +71,7 @@ export const CurrentlyBuilding: React.FC = () => {
           "  2. AI CODING HARNESS",
           "     - Developer CLI exploring agentic loops, tool calling & sandbox IPC.",
           "     - Status: BUILDING / ACTIVE WORK",
-          "  3. F1 TELEMETRY / DATA PLATFORM",
-          "     - OpenF1 ingestion, WebSocket streaming & HTML5 2D Canvas rendering.",
-          "     - Status: PERSONAL EXPERIMENT / WORKING PROTOTYPE",
-          "  4. CEX MATCHING ENGINE & ORDER BOOK",
+          "  3. CEX MATCHING ENGINE & ORDER BOOK",
           "     - In-memory price-time FIFO matching engine with double-entry ledger.",
           "     - Status: COMPLETED / REPOSITORY VERIFIED",
         ].join("\n");
@@ -113,7 +110,7 @@ export const CurrentlyBuilding: React.FC = () => {
         return "Simulated Web Terminal (React 19 / Client-Side Environment) — No remote shell execution.";
 
       case "welcome":
-        return "Antigravity Terminal v1.0 [Browser Client Simulator]\nType 'help' to inspect available commands.";
+        return "Antigravity Terminal v1.0\nType 'help' to inspect available commands.";
 
       default:
         return `Command not found: '${rawCmd}'. Type 'help' to see available commands.`;
@@ -290,42 +287,29 @@ export const CurrentlyBuilding: React.FC = () => {
               </div>
             </div>
 
-            {/* 2. Exploring & Open To Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/20 pt-8 font-mono">
-              {/* Exploring */}
-              <div className="md:col-span-6 space-y-4">
-                <div className="text-xs font-bold text-[#00F0FF] uppercase tracking-wider flex items-center gap-2">
-                  <span>■ EXPLORATION & LEARNING FOCUS</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {explorationAreas.map((area) => (
-                    <div
-                      key={area}
-                      className="p-2.5 bg-[#121212] border border-white/10 flex items-center gap-2 text-white/90"
-                    >
-                      <span className="text-[#00F0FF] font-bold">▹</span>
-                      <span>{area}</span>
-                    </div>
-                  ))}
-                </div>
+            {/* 2. GitHub Contributions & Open To Columns */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-t border-white/20 pt-8 font-mono items-start">
+              {/* GitHub Contributions */}
+              <div className="lg:col-span-8">
+                <GitHubContributions username="ouroboros1X" />
               </div>
 
               {/* Open To */}
-              <div className="md:col-span-6 space-y-4">
+              <div className="lg:col-span-4 space-y-3">
                 <div className="text-xs font-bold text-[#00F0FF] uppercase tracking-wider flex items-center gap-2">
                   <span>■ OPEN TO OPPORTUNITIES</span>
                 </div>
-                <div className="space-y-2 text-xs">
+                <div className="space-y-2.5 text-xs">
                   {openToOpportunities.map((op) => (
                     <div
                       key={op.title}
-                      className="p-3 bg-[#121212] border border-white/10"
+                      className="p-3.5 bg-[#121212] border-2 border-white/15 hover:border-[#00F0FF] transition-colors"
                     >
                       <div className="font-bold text-white flex items-center gap-1.5">
                         <span className="text-[#00F0FF]">●</span>
                         <span>{op.title}</span>
                       </div>
-                      <div className="text-[11px] text-white/70 font-sans mt-0.5">
+                      <div className="text-[11px] text-white/70 font-sans mt-1 leading-relaxed">
                         {op.desc}
                       </div>
                     </div>

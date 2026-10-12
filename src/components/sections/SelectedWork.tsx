@@ -1,164 +1,321 @@
 "use client";
 
-import React, { useState } from "react";
-import { projectsData, Project } from "@/data/projects";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "framer-motion";
+import { projectsData } from "@/data/projects";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { Button } from "@/components/ui/Button";
-import { TechBadge } from "@/components/ui/TechBadge";
-import { BrutalCard } from "@/components/ui/BrutalCard";
-import { ArchitectureDiagram } from "@/components/projects/ArchitectureDiagram";
-import { CaseStudyModal } from "@/components/projects/CaseStudyModal";
+import { ProjectCard } from "@/components/projects/ProjectCard";
 
 export const SelectedWork: React.FC = () => {
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState<Project | null>(
-    null
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
+  const [isDesktop, setIsDesktop] = useState<boolean>(true);
+  const [entryDistance, setEntryDistance] = useState<number>(1100);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  const totalProjects = projectsData.length;
+
+  // Track viewport dimensions for responsive handling & precise off-screen positioning
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      // Desktop sticky-stage requires >= 1024px width and reasonable viewport height
+      setIsDesktop(width >= 1024 && height >= 640);
+      setEntryDistance(Math.max(height + 150, 1000));
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Scroll tracking on the tall projects-section wrapper
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Track active foreground card for depth cues & indicator
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 0.4) {
+      setActiveCardIndex(0);
+    } else if (latest < 0.75) {
+      setActiveCardIndex(1);
+    } else {
+      setActiveCardIndex(2);
+    }
+  });
+
+  // Mathematical Stacking Geometry (Balanced Two-Column Cards):
+  // Card 0 rests at x = (totalProjects - 1 - 0) * stepX, y = 0px
+  // Card 1 rests at x = (totalProjects - 1 - 1) * stepX, y = 22px
+  // Card 2 rests at x = (totalProjects - 1 - 2) * stepX, y = 44px
+  const stepX = 18;
+  const stepY = 22;
+  const totalOffset = (totalProjects - 1) * stepX; // 36px for 3 cards
+  const cardHeight = 550; // Proportional height for balanced 2-column content
+
+  // Card 1 arrival transforms (enters smoothly between scroll progress 0.15 and 0.40)
+  const y1 = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.4, 1],
+    [entryDistance, entryDistance, 0, 0]
+  );
+  const opacity1 = useTransform(
+    scrollYProgress,
+    [0, 0.13, 0.18, 1],
+    [0, 0, 1, 1]
   );
 
+  // Card 2 arrival transforms (enters smoothly between scroll progress 0.50 and 0.75)
+  const y2 = useTransform(
+    scrollYProgress,
+    [0, 0.5, 0.75, 1],
+    [entryDistance, entryDistance, 0, 0]
+  );
+  const opacity2 = useTransform(
+    scrollYProgress,
+    [0, 0.48, 0.53, 1],
+    [0, 0, 1, 1]
+  );
+
+  const cardTransforms = [
+    { y: 0, opacity: 1 },
+    { y: y1, opacity: opacity1 },
+    { y: y2, opacity: opacity2 },
+  ];
+
+  // Toggle case study handler with smooth scroll anchoring
+  const handleToggleCaseStudy = (projectId: string) => {
+    if (expandedCardId === projectId) {
+      // Collapsing active case study -> restore sticky stack
+      const cardIndex = projectsData.findIndex((p) => p.id === projectId);
+      setExpandedCardId(null);
+      setTimeout(() => {
+        if (containerRef.current) {
+          const rect = containerRef.current.getBoundingClientRect();
+          const containerTop = window.scrollY + rect.top;
+          const containerHeight = containerRef.current.offsetHeight;
+          let progress = 0.05;
+          if (cardIndex === 1) progress = 0.45;
+          if (cardIndex === 2) progress = 0.85;
+          window.scrollTo({
+            top: containerTop + (containerHeight - window.innerHeight) * progress,
+            behavior: "smooth",
+          });
+        }
+      }, 80);
+    } else {
+      // Expanding case study -> suspend sticky pinning & scroll into view
+      setExpandedCardId(projectId);
+      setTimeout(() => {
+        const el = document.getElementById(`project-card-${projectId}`);
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 85;
+          window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+        }
+      }, 80);
+    }
+  };
+
   return (
-    <section id="work" className="py-20 sm:py-28 border-b border-[#050505]">
-      <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mb-14 sm:mb-20">
-          <SectionLabel label="SELECTED WORK" />
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-[#050505] mt-3">
-            THINGS I&apos;VE BUILT.
-          </h2>
-          <p className="font-mono text-xs sm:text-sm text-[#050505]/70 mt-2 max-w-xl">
-            Engineering projects and functional systems built from first principles. No superficial mockups — every project runs real code.
-          </p>
-        </div>
+    <section id="work" className="border-b border-[#050505] relative bg-[#F5F5F0]">
+      {/* Section Header Introduction */}
+      <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-6 sm:pb-8">
+        <SectionLabel label="SELECTED WORK" />
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-2.5">
+          <div>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-[#050505]">
+              THINGS I&apos;VE BUILT.
+            </h2>
+            <p className="font-mono text-xs sm:text-sm text-[#050505]/70 mt-1.5 max-w-xl">
+              Engineering projects and functional systems built from first principles. Rich previews with architecture diagrams by default — expand any case study for deep dives.
+            </p>
+          </div>
 
-        {/* Large Horizontal Project Sections */}
-        <div className="space-y-16 sm:space-y-20">
-          {projectsData.map((project, idx) => (
-            <BrutalCard
-              key={project.id}
-              borderWidth={2}
-              shadow="lg"
-              className="bg-white p-6 sm:p-8 md:p-10 relative overflow-hidden"
-            >
-              {/* Horizontal Layout Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-                {/* Left: Project Details (7 cols) */}
-                <div className="lg:col-span-7 flex flex-col justify-between h-full">
-                  <div>
-                    {/* Project Eyebrow & Number */}
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="bg-[#00F0FF] text-[#050505] font-mono font-bold text-xs px-2.5 py-0.5 border border-[#050505]">
-                        {project.number}
-                      </span>
-                      <span className="font-mono text-xs text-[#050505]/60 uppercase tracking-wider font-semibold">
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Headline */}
-                    <h3 className="text-2xl sm:text-4xl lg:text-4xl font-black uppercase tracking-tight text-[#050505] mb-3">
-                      {project.title}
-                    </h3>
-
-                    {/* Tagline */}
-                    <p className="text-sm sm:text-base font-semibold text-[#050505] mb-4">
-                      {project.tagline}
-                    </p>
-
-                    {/* Description */}
-                    <p className="text-xs sm:text-sm text-[#050505]/80 leading-relaxed mb-6">
-                      {project.description}
-                    </p>
-
-                    {/* Technical Highlights */}
-                    <div className="mb-6 space-y-2 bg-[#F5F5F0] p-4 border border-[#050505]">
-                      <div className="font-mono text-[10px] sm:text-xs font-bold text-[#050505] uppercase tracking-wider">
-                        KEY IMPLEMENTATION HIGHLIGHTS:
-                      </div>
-                      <ul className="space-y-1.5 text-xs text-[#050505]/90">
-                        {project.technicalDetails.map((detail, dIdx) => (
-                          <li key={dIdx} className="flex items-start gap-2">
-                            <span className="text-[#050505] font-bold">■</span>
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 mb-8">
-                      {project.tags.map((tag) => (
-                        <TechBadge key={tag} label={tag} variant="default" />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-black/15">
-                    <Button
-                      href={project.githubUrl}
-                      variant="primary"
-                      size="md"
-                      isExternal
-                      id={`project-gh-${idx}`}
-                    >
-                      {project.sourceCtaLabel || "GITHUB →"}
-                    </Button>
-                    <Button
-                      variant="cyan"
-                      size="md"
-                      href={project.liveUrl}
-                      isExternal={Boolean(project.liveUrl)}
-                      onClick={
-                        project.liveUrl
-                          ? undefined
-                          : () => setSelectedCaseStudy(project)
-                      }
-                      id={`project-case-study-${idx}`}
-                    >
-                      {project.exploreCtaLabel || "CASE STUDY →"}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Right: Technical Diagram & Metrics (5 cols) */}
-                <div className="lg:col-span-5 flex flex-col gap-6">
-                  {/* Architecture Diagram */}
-                  <ArchitectureDiagram
-                    steps={project.pipeline.steps}
-                    title={project.pipeline.title}
-                  />
-
-                  {/* Quick Metrics Bar */}
-                  <div className="grid grid-cols-2 gap-2.5 font-mono text-xs">
-                    {project.metrics.map((m, mIdx) => (
-                      <div
-                        key={m.label}
-                        className={`p-2.5 bg-[#F5F5F0] border border-[#050505] ${
-                          mIdx === project.metrics.length - 1 &&
-                          project.metrics.length % 2 === 1
-                            ? "col-span-2"
-                            : ""
-                        }`}
-                      >
-                        <div className="text-[10px] text-[#050505]/60 uppercase">
-                          {m.label}
-                        </div>
-                        <div className="font-bold text-[#050505] text-xs truncate mt-0.5">
-                          {m.value}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </BrutalCard>
-          ))}
+          {/* Interactive Stack Depth Indicator */}
+          <div className="hidden lg:flex items-center gap-3 font-mono text-xs text-[#050505] bg-white border-2 border-[#050505] px-3.5 py-2 shadow-[3px_3px_0_#050505] shrink-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#00F0FF] border border-[#050505] animate-pulse" />
+            <span className="font-bold tracking-wider">
+              {expandedCardId ? "CASE STUDY:" : "STACK DEPTH:"}
+            </span>
+            <span className="bg-[#050505] text-[#00F0FF] px-2 py-0.5 font-bold text-[11px] border border-[#050505]">
+              0{activeCardIndex + 1} / 0{totalProjects}
+            </span>
+            <span className="text-[#050505]/60 text-[11px] uppercase truncate max-w-[140px]">
+              {projectsData[activeCardIndex]?.title || "PROJECT"}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Case Study Deep-Dive Modal */}
-      <CaseStudyModal
-        project={selectedCaseStudy}
-        onClose={() => setSelectedCaseStudy(null)}
-      />
+      {/* Main Presentation */}
+      {isDesktop && !prefersReducedMotion && expandedCardId === null ? (
+        /* Desktop: Scroll-Driven Overlapping Sticky Stack */
+        <div
+          ref={containerRef}
+          className="relative w-full"
+          style={{ height: `${(totalProjects - 1) * 115 + 110}vh` }}
+        >
+          {/* Sticky Stacking Stage */}
+          <div className="sticky top-[68px] lg:top-20 w-full px-4 sm:px-6 lg:px-8 pb-16 lg:pb-20 flex justify-center">
+            {/* Unified Stacking Geometry Canvas */}
+            <div
+              className="relative w-full max-w-[1250px]"
+              style={{
+                minHeight: `${cardHeight + (totalProjects - 1) * stepY + 48}px`,
+              }}
+            >
+              {projectsData.map((project, idx) => {
+                const restX = (totalProjects - 1 - idx) * stepX;
+                const restY = idx * stepY;
+                const zIndex = (idx + 1) * 10;
+                const isForeground = activeCardIndex === idx;
+                const transformConfig = cardTransforms[idx] || { y: 0, opacity: 1 };
+
+                return (
+                  <motion.div
+                    key={project.id}
+                    id={`project-card-${project.id}`}
+                    className="absolute"
+                    style={{
+                      left: `${restX}px`,
+                      top: `${restY}px`,
+                      width: `calc(100% - ${totalOffset}px)`,
+                      minHeight: `${cardHeight}px`,
+                      zIndex: zIndex,
+                      y: transformConfig.y,
+                      opacity: transformConfig.opacity,
+                      pointerEvents: idx <= activeCardIndex ? "auto" : "none",
+                    }}
+                  >
+                    <ProjectCard
+                      project={project}
+                      idx={idx}
+                      totalProjects={totalProjects}
+                      isActive={isForeground}
+                      isExpanded={false}
+                      onToggleCaseStudy={handleToggleCaseStudy}
+                      shadow={isForeground ? "lg" : "normal"}
+                      className={
+                        isForeground
+                          ? "shadow-[8px_8px_0_#050505]"
+                          : "shadow-[5px_5px_0_#050505]"
+                      }
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : isDesktop && !prefersReducedMotion && expandedCardId !== null ? (
+        /* Desktop: Expanded Case Study View (Sticky Released for Natural Scrolling & Zero Clipping) */
+        <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-2">
+          {/* Active Case Study Banner with Instant Stack Restore */}
+          <div className="mb-6 p-3 bg-white border-2 border-[#050505] shadow-[4px_4px_0_#050505] flex items-center justify-between">
+            <div className="flex items-center gap-2.5 font-mono text-xs">
+              <span className="w-2.5 h-2.5 bg-[#00F0FF] border border-[#050505] animate-pulse" />
+              <span className="font-bold text-[#050505]">ACTIVE CASE STUDY:</span>
+              <span className="font-black uppercase text-[#050505]">
+                {projectsData.find((p) => p.id === expandedCardId)?.title}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleToggleCaseStudy(expandedCardId)}
+              className="font-mono text-xs font-bold text-[#050505] hover:bg-[#050505] hover:text-[#00F0FF] px-3 py-1 border border-[#050505] bg-white transition-colors cursor-pointer"
+            >
+              RESTORE STACK VIEW ↑
+            </button>
+          </div>
+
+          <div className="space-y-8">
+            {projectsData.map((project, idx) => {
+              const isExpanded = project.id === expandedCardId;
+              return (
+                <div
+                  key={project.id}
+                  id={`project-card-${project.id}`}
+                  className="transition-all duration-200"
+                >
+                  <ProjectCard
+                    project={project}
+                    idx={idx}
+                    totalProjects={totalProjects}
+                    isActive={isExpanded}
+                    isExpanded={isExpanded}
+                    onToggleCaseStudy={handleToggleCaseStudy}
+                    shadow={isExpanded ? "lg" : "normal"}
+                    className={
+                      isExpanded
+                        ? "shadow-[8px_8px_0_#050505]"
+                        : "shadow-[5px_5px_0_#050505]"
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        /* Mobile / Small Screens & Reduced-Motion: Layered Responsive Stack */
+        <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+          <div className="relative space-y-8 sm:space-y-12">
+            {projectsData.map((project, idx) => {
+              const isExpanded = expandedCardId === project.id;
+
+              return (
+                <div
+                  key={project.id}
+                  id={`project-card-${project.id}`}
+                  className="transition-all duration-200"
+                  style={{
+                    zIndex: isExpanded ? 50 : (idx + 1) * 10,
+                  }}
+                >
+                  <ProjectCard
+                    project={project}
+                    idx={idx}
+                    totalProjects={totalProjects}
+                    isActive={true}
+                    isExpanded={isExpanded}
+                    onToggleCaseStudy={handleToggleCaseStudy}
+                    shadow="lg"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Section Bottom Clearance & Smooth Transition */}
+      <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:pb-24">
+        <div className="flex items-center justify-between border-t-2 border-[#050505] pt-4 font-mono text-xs text-[#050505]">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 bg-[#00F0FF] border border-[#050505]" />
+            <span className="font-bold tracking-wider">
+              END OF SELECTED WORK · 03/03
+            </span>
+          </div>
+          <a
+            href="#stack"
+            className="hover:text-[#00F0FF] hover:bg-[#050505] font-bold text-[#050505] px-2.5 py-1 border border-[#050505] bg-white shadow-[2px_2px_0_#050505] hover:shadow-none transition-all cursor-pointer"
+          >
+            NEXT: TECHNOLOGY STACK ↓
+          </a>
+        </div>
+      </div>
     </section>
   );
 };

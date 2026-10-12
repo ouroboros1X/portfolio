@@ -75,7 +75,7 @@ export const systemLayers: SystemLayer[] = [
     name: "PRODUCTION",
     scope: "OBSERVABILITY & RELIABILITY",
     description:
-      "Telemetry metrics, Prometheus scrapers, Grafana visual dashboards, real-world availability, and predictable system degradation.",
+      "System metrics, Prometheus scrapers, Grafana visual dashboards, real-world availability, and predictable system degradation.",
     technologies: ["Prometheus", "Grafana", "CloudWatch", "GitHub Actions CI/CD", "AWS / GCP"],
     keyInspection: "SLOs & SLAs · Latency percentiles (p95/p99) · Automated health checks",
   },

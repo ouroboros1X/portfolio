@@ -45,24 +45,25 @@ export const projectsData: Project[] = [
     category: "SYSTEMS · MACHINE LEARNING RUNTIME",
     tagline: "Transformer forward pass implemented from first principles in C++17.",
     description:
-      "A GPT-2 inference engine implemented in C++ with a focus on understanding the underlying mechanics of model inference. Pure C++17 forward computation graph without PyTorch, TensorFlow, or ONNX runtimes.",
+      "A GPT-2 inference engine implemented in C++ to explore the mechanics of transformer inference. The project focuses on model execution, tensor operations, transformer computation, and token generation without relying on a high-level inference runtime. Loads GPT-2 Small binary weights into contiguous memory buffers and executes the full forward computation graph. Generates text autoregressively with causal self-attention and temperature-scaled sampling.",
     technicalDetails: [
       "Custom tensor buffer memory management without runtime allocations during forward loop",
       "Manual matrix multiplication kernels with cache-friendly loop tiling and SIMD-friendly layout",
       "Full Transformer block: LayerNorm, causal masked MHA (12 heads), MLP with GELU, and residual sums",
       "Greedy and temperature-based autoregressive decoding loop predicting 50,257 vocabulary logits",
     ],
-    tags: ["C++", "ML", "INFERENCE", "SYSTEMS"],
+    tags: ["C++", "C++17", "ML", "INFERENCE", "SYSTEMS"],
     githubUrl: "https://github.com/ouroboros1X/GPT2_INFERENCE-ENGINE",
     caseStudyAvailable: true,
     pipeline: {
+      title: "INFERENCE PIPELINE",
       steps: [
         { name: "INPUT", desc: "Raw ASCII string stream", badge: "std::string" },
         { name: "TOKENIZATION", desc: "Byte-pair encoding lookup", badge: "vocab.bpe" },
         { name: "EMBEDDINGS", desc: "WTE token + WPE position sum", badge: "768-dim" },
         { name: "TRANSFORMER", desc: "12× Causal MHA · LayerNorm · MLP · Residuals", badge: "124M params" },
         { name: "LOGITS", desc: "Vocab projection to 50,257 dimensions", badge: "Float32" },
-        { name: "TOKENS", desc: "Argmax / Top-K autoregressive sampling", badge: "Emit token" },
+        { name: "NEXT TOKEN", desc: "Argmax / Top-K autoregressive sampling", badge: "Emit token" },
       ],
     },
     metrics: [
@@ -106,24 +107,25 @@ void causal_self_attention(
     category: "DEVELOPER TOOLS · AGENTIC RUNTIME",
     tagline: "Local CLI software-engineering harness inspired by agentic coding workflows.",
     description:
-      "A local developer tool inspired by agentic coding workflows, built to experiment with model APIs, tool execution and software-engineering agents.",
+      "A local developer tool inspired by agentic coding workflows, built to experiment with model APIs, tool execution and software-engineering agents. Implements an autonomous agent loop that executes commands, inspects files, and iterates on code within terminal sessions. Provides deterministic tool dispatch with compiler diagnostics and error recovery feedback loops. Compacts and prunes conversation context to prevent prompt overflow during long debugging runs.",
     technicalDetails: [
       "Pluggable provider interface supporting Anthropic Claude 3.5 Sonnet and OpenAI GPT-4o",
       "Deterministic tool calling protocol: bash runner, file read/write, pattern grep, ripgrep inspection",
       "Conversation context compaction and pruning to prevent prompt overflow during long debugging runs",
       "Robust error recovery: feedback loops when shell commands fail or edits do not match file markers",
     ],
-    tags: ["TYPESCRIPT", "LLM", "AGENTS", "CLI"],
+    tags: ["TYPESCRIPT", "LLM", "AGENTS", "CLI", "SYSTEMS"],
     githubUrl: "https://github.com/ouroboros1X/claudecode-harnes",
     caseStudyAvailable: true,
     pipeline: {
+      title: "AGENTIC WORKFLOW",
       steps: [
         { name: "USER GOAL", desc: "Natural language feature request", badge: "CLI prompt" },
         { name: "WORKSPACE DISCOVERY", desc: "Index tree & active git diffs", badge: "ripgrep" },
         { name: "AGENTIC LOOP", desc: "Prompt assembly & model invocation", badge: "Provider" },
         { name: "TOOL DISPATCH", desc: "Execute bash commands / file edits", badge: "IPC" },
         { name: "OBSERVATION", desc: "Stdout / Stderr / Diff validation", badge: "Feedback" },
-        { name: "VERIFIED COMMIT", desc: "Run linter/tests & output patch", badge: "Git diff" },
+        { name: "VERIFIED PATCH", desc: "Run linter/tests & output patch", badge: "Git diff" },
       ],
     },
     metrics: [
@@ -160,130 +162,24 @@ void causal_self_attention(
     },
   },
   {
-    id: "f1-telemetry-platform",
-    number: "PERSONAL PROJECT 03",
-    title: "F1 TELEMETRY / DATA PLATFORM",
-    category: "REAL-TIME STREAMING · DATA ENGINEERING",
-    tagline: "A personal engineering project exploring real-time Formula 1 telemetry and streaming analytics.",
-    description:
-      "Built as a personal project to explore live Formula 1 data, telemetry streaming, and high-frequency visualization. The platform experiments with ingesting data from OpenF1, distributing telemetry through WebSockets, and rendering driver and car information in a custom dashboard.",
-    technicalDetails: [
-      "Real-time telemetry streaming and client-side updates.",
-      "WebSocket-based communication and reconnection handling.",
-      "Canvas-based visualization for telemetry data.",
-      "Driver comparisons and telemetry analysis.",
-      "A customizable Formula 1 garage-style dashboard.",
-    ],
-    tags: ["REACT 19", "TYPESCRIPT", "WEBSOCKETS", "EXPRESS", "HTML5 CANVAS", "OPENF1 API"],
-    githubUrl: "https://github.com/ouroboros1X",
-    sourceCtaLabel: "VIEW SOURCE →",
-    exploreCtaLabel: "EXPLORE PROJECT →",
-    caseStudyAvailable: true,
-    pipeline: {
-      title: "DATAFLOW PIPELINE",
-      steps: [
-        {
-          name: "DATA SOURCE",
-          desc: "OpenF1 API REST endpoints querying session schedule, driver rosters, and car data",
-          badge: "OpenF1 API",
-        },
-        {
-          name: "STREAMING LAYER",
-          desc: "Node.js service executing scheduled polling loops, validating session keys, and caching updates",
-          badge: "Node.js / Express",
-        },
-        {
-          name: "WEBSOCKET TRANSPORT",
-          desc: "Centralized ws WebSocket server broadcasting updates with exponential backoff client reconnects",
-          badge: "ws / TCP",
-        },
-        {
-          name: "CLIENT STATE",
-          desc: "React Context and TanStack Query managing session lifecycle, driver state, and HTTP hydration",
-          badge: "React Context",
-        },
-        {
-          name: "TELEMETRY VISUALIZATION",
-          desc: "HTML5 2D Canvas charts rendering speed, RPM, throttle, and brake traces directly to canvas",
-          badge: "2D Canvas API",
-        },
-        {
-          name: "DASHBOARD",
-          desc: "Personal F1 telemetry interface with draggable / resizable widget grid and driver comparison studio",
-          badge: "Garage UI",
-        },
-      ],
-    },
-    metrics: [
-      { label: "DATA SOURCE", value: "OPENF1 API" },
-      { label: "COMMUNICATION PROTOCOL", value: "WEBSOCKETS (WS) + REST" },
-      { label: "RENDERING TECH", value: "HTML5 2D CANVAS" },
-      { label: "FRAMEWORK & LANGUAGE", value: "REACT 19 · TYPESCRIPT" },
-      { label: "CURRENT STATUS", value: "PERSONAL PROTOTYPE" },
-    ],
-    deepDive: {
-      modalEyebrow: "PERSONAL PROJECT EXPLORATION",
-      problem:
-        "Investigating how to stream and visualize high-frequency Formula 1 telemetry without triggering excessive React virtual DOM reconciliation or layout thrashing during continuous updates.",
-      implementation:
-        "Architected a dual-layer pipeline: a Node.js backend handles OpenF1 ingestion, data normalization, and WebSocket broadcasting, while the client bypasses DOM reflows by drawing telemetry channels (speed, RPM, throttle, brake) directly onto HTML5 2D Canvas contexts.",
-      keyTakeaway:
-        "Decouple high-frequency streaming visualizations from declarative UI trees: declarative React handles responsive garage widgets and controls, while direct Canvas contexts handle rapid waveform rendering.",
-      codeSnippet: {
-        filename: "ChannelChart.tsx",
-        language: "typescript",
-        code: `// Direct HTML5 2D Canvas telemetry trace renderer (from src/pages/Telemetry.tsx)
-const ChannelChart: React.FC<ChannelChartProps> = React.memo(({ data, color }) => {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
-  React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || data.length === 0) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const w = canvas.width;
-    const h = canvas.height;
-    const min = Math.min(...data);
-    const max = Math.max(...data);
-    const range = max - min || 1;
-
-    // Draw high-frequency telemetry signal line
-    ctx.clearRect(0, 0, w, h);
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1.5;
-    data.forEach((val, idx) => {
-      const x = (idx / (data.length - 1)) * w;
-      const y = h - ((val - min) / range) * (h - 10);
-      idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-  }, [data, color]);
-
-  return <canvas ref={canvasRef} className="w-full h-[100px]" />;
-});`,
-      },
-    },
-  },
-  {
     id: "cex-matching-engine",
-    number: "PROJECT 04",
+    number: "PROJECT 03",
     title: "CEX MATCHING ENGINE & ORDER BOOK",
     category: "DISTRIBUTED SYSTEMS · FINANCIAL INFRASTRUCTURE",
     tagline: "First-principles centralized crypto exchange matching engine and transaction ledger.",
     description:
-      "A centralized exchange (CEX) core built from scratch to demystify financial infrastructure. Implements an in-memory limit order book matching engine with FIFO price-time priority, double-entry balance locks, atomic trade executions, and real-time order book broadcasts.",
+      "A centralized crypto exchange (CEX) core built from scratch to demystify high-throughput financial infrastructure. Implements an in-memory limit order book matching engine with FIFO price-time priority, double-entry balance locks, atomic trade executions, and real-time order book broadcasts. Decouples fast in-memory execution from asynchronous ledger persistence for auditability and sub-millisecond matching performance.",
     technicalDetails: [
       "In-memory price-level red-black tree / sorted doubly linked list order book for deterministic sub-millisecond matching",
       "Strict price-time priority matching algorithm for both LIMIT and MARKET orders with partial fills",
       "Double-entry bookkeeping preventing fractional balance discrepancies or double-spend race conditions",
       "Event-driven transaction log for state reconstruction and failure recovery",
     ],
-    tags: ["TYPESCRIPT", "MATCHING ENGINE", "ORDER BOOK", "PRISMA", "POSTGRESQL", "LOW LATENCY"],
+    tags: ["TYPESCRIPT", "MATCHING ENGINE", "ORDER BOOK", "POSTGRESQL", "LOW LATENCY"],
     githubUrl: "https://github.com/ouroboros1X/centralized-exchange",
     caseStudyAvailable: true,
     pipeline: {
+      title: "MATCHING ARCHITECTURE",
       steps: [
         { name: "ORDER SUBMISSION", desc: "User submits LIMIT/MARKET order", badge: "REST / WS" },
         { name: "BALANCE LOCK", desc: "Atomically reserve user assets", badge: "Ledger check" },

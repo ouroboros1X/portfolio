@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
           id="nav-brand-logo"
         >
           <span className="inline-flex items-center justify-center bg-[#050505] text-[#00F0FF] px-1.5 py-0.5 font-bold text-xs border border-[#050505] group-hover:bg-[#00F0FF] group-hover:text-[#050505] transition-colors">
-            VX
+            V1X
           </span>
           <span className="font-extrabold tracking-wider text-base">VINAYAK</span>
           <span className="hidden sm:inline-block text-[11px] text-[#050505]/60 font-normal">

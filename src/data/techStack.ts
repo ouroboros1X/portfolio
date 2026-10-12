@@ -19,7 +19,7 @@ export const stackCategories: StackCategory[] = [
     category: "FRONTEND & WEB APPS",
     posture: "CORE / BUILDING",
     description:
-      "Crafting responsive web applications, interactive dashboards, and design systems with strict TypeScript types, server components, and clean CSS.",
+      "Crafting responsive web applications, interactive interfaces, and design systems with strict TypeScript types, server components, and clean CSS.",
     skills: [
       { name: "TypeScript", level: "Building" },
       { name: "JavaScript (ES6+)", level: "Building" },
@@ -29,8 +29,8 @@ export const stackCategories: StackCategory[] = [
       { name: "HTML5 / CSS3", level: "Building" },
     ],
     projectReference: {
-      name: "F1 Telemetry Dashboard",
-      href: "#work",
+      name: "Interactive Portfolio",
+      href: "#hero",
     },
   },
   {
@@ -93,12 +93,12 @@ export const stackCategories: StackCategory[] = [
     category: "SYSTEMS & PERFORMANCE",
     posture: "SYSTEMS / EXPERIMENTAL",
     description:
-      "Investigating performance close to hardware: cache-conscious loops, zero-allocation buffers, SIMD parallelism, and direct 2D Canvas rendering.",
+      "Investigating performance close to hardware: cache-conscious loops, zero-allocation buffers, SIMD parallelism, and memory efficiency.",
     skills: [
       { name: "C++17", level: "Exploring" },
       { name: "Cache Locality & Tiling", level: "Exploring" },
       { name: "Circular Ring Buffers", level: "Building" },
-      { name: "HTML5 2D Canvas", level: "Building" },
+      { name: "Contiguous Memory Buffers", level: "Building" },
       { name: "SIMD / AVX2 (Concepts)", level: "Learning" },
     ],
     projectReference: {
