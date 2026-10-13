@@ -6,15 +6,8 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { BrutalCard } from "@/components/ui/BrutalCard";
 
 export const TechStackSection: React.FC = () => {
-  const getBadgeStyle = (level: "Building" | "Learning" | "Exploring") => {
-    switch (level) {
-      case "Building":
-        return "bg-white text-[#050505] border-[#050505]";
-      case "Learning":
-        return "bg-[#00F0FF]/25 text-[#050505] border-[#050505]";
-      case "Exploring":
-        return "bg-[#F5F5F0] text-[#050505]/80 border-[#050505]/40";
-    }
+  const getBadgeStyle = () => {
+    return "bg-white text-[#050505] border-[#050505]";
   };
 
   return (
@@ -22,7 +15,7 @@ export const TechStackSection: React.FC = () => {
       <div className="max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-14 sm:mb-20">
-          <SectionLabel label="TECHNOLOGY STACK" />
+          <SectionLabel label="TECHNOLOGY STACK" accent={false} />
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-[#050505] mt-3">
             TOOLS &amp; TECHNOLOGIES.
           </h2>
@@ -34,15 +27,15 @@ export const TechStackSection: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 mt-6 font-mono text-[11px] text-[#050505]/80">
             <span className="font-bold uppercase text-[#050505]">POSTURE LEGEND:</span>
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-white border border-[#050505]">
-              <span className="w-2 h-2 bg-[#050505]" />
+              <span className="font-bold text-[#050505]">[B]</span>
               <span>BUILDING (ACTIVE / PRODUCTION)</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-[#00F0FF]/25 border border-[#050505]">
-              <span className="w-2 h-2 bg-[#00F0FF]" />
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-white border border-[#050505]">
+              <span className="font-bold text-[#050505]">[L]</span>
               <span>LEARNING (DEVELOPING PROFICIENCY)</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-[#F5F5F0] border border-[#050505]/40">
-              <span className="w-2 h-2 bg-neutral-400" />
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-white border border-[#050505]">
+              <span className="font-bold text-[#050505]">[E]</span>
               <span>EXPLORING (FIRST-PRINCIPLES LABS)</span>
             </span>
           </div>
@@ -60,7 +53,7 @@ export const TechStackSection: React.FC = () => {
               <div>
                 {/* Header: Posture Eyebrow */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="bg-[#00F0FF] text-[#050505] font-mono font-bold text-[10px] px-2 py-0.5 border border-[#050505]">
+                  <span className="bg-white text-[#050505] font-mono font-bold text-[10px] px-2 py-0.5 border border-[#050505]">
                     {cat.posture}
                   </span>
                 </div>
@@ -84,9 +77,7 @@ export const TechStackSection: React.FC = () => {
                     {cat.skills.map((skill) => (
                       <span
                         key={skill.name}
-                        className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-mono font-semibold border ${getBadgeStyle(
-                          skill.level
-                        )}`}
+                        className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-mono font-semibold border ${getBadgeStyle()}`}
                       >
                         <span>{skill.name}</span>
                         <span className="text-[9px] text-[#050505]/50 font-normal">
@@ -104,7 +95,7 @@ export const TechStackSection: React.FC = () => {
                   <span className="text-[#050505]/60">APPLIED IN:</span>
                   <a
                     href={cat.projectReference.href}
-                    className="font-bold text-[#050505] hover:text-[#00F0FF] hover:bg-[#050505] px-1 py-0.5 transition-colors"
+                    className="font-bold text-[#050505] hover:text-white hover:bg-[#050505] px-1 py-0.5 transition-colors"
                   >
                     {cat.projectReference.name} →
                   </a>
@@ -117,3 +108,4 @@ export const TechStackSection: React.FC = () => {
     </section>
   );
 };
+
